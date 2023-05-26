@@ -1,32 +1,47 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="el">
 <head>
-  <title>Piraeus</title>
-  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
-  <style>
-    html, body, #map {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
-	
-  </style>
+  <meta charset="UTF-8">
+  <meta name="description" content="Free Web tutorials">
+  <meta name="keywords" content="HTML, CSS, JavaScript">
+  <meta name="author" content="John Doe">
+  <link rel="stylesheet" href="style.css">
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+     integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+     crossorigin=""/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+  <!-- Make sure you put this AFTER Leaflet's CSS -->
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" 
+     integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+     crossorigin=""></script>
+  <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 </head>
 <body>
   <div id="map"></div>
-  <script>
-    // Initialize the map and set view to the location of AKMI AVT in Piraeus, Greece
-    var map = L.map('map').setView([37.9461287, 23.6267181], 17);
 
-    // Add OpenStreetMap tile layer to the map
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  <script>
+    var map = L.map('map').setView([37.94296740923939, 23.644866810129752], 17);
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19
     }).addTo(map);
 
-    // Custom marker icon for point of interest
+    L.Control.geocoder().addTo(map);
+
+    L.Routing.control({
+      waypoints: [
+        L.latLng(37.94296740923939, 23.644866810129752),
+        L.latLng(37.94546983570866, 23.6468711231226)
+      ],
+      routeWhileDragging: true,
+      geocoder: L.Control.Geocoder.nominatim()
+    }).addTo(map);
+
+    // Custom icon for points of interest
     var poiIcon = L.icon({
       iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
       shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -37,7 +52,7 @@
       popupAnchor: [1, -34]
     });
 
-    // Custom marker icon for user location
+    // Custom icon for user location
     var userIcon = L.icon({
       iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png',
       shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -48,7 +63,7 @@
       popupAnchor: [1, -34]
     });
 
-    // Define the point of interest
+    // Add markers for points of interest
     var pointOfInterest1 = {
       name: 'Τρούμπα',
  
@@ -163,15 +178,11 @@
       lng: 23.6307551
     };
 
-    // Add a marker with custom icon for the point of interest
-    var marker8 = L.marker([pointOfInterest8.lat, pointOfInterest8.lng], {icon: poiIcon}).addTo(map);
-    marker8.bindPopup('<h3>' + pointOfInterest8.name + '</h3><p>' + pointOfInterest8.description8 + '</p>');
-
     // Function to display user's location on the map with a custom icon
     function displayUserLocation(position) {
       var userLat = position.coords.latitude;
       var userLng = position.coords.longitude;
-      var userMarker = L.marker([userLat, userLng], {icon: userIcon}).addTo(map);
+      var userMarker = L.marker([userLat, userLng], { icon: userIcon }).addTo(map);
       userMarker.bindPopup('<h3>Your Location</h3>');
       map.setView([userLat, userLng], 17);
     }
@@ -187,9 +198,6 @@
     } else {
       console.log('Geolocation is not supported by this browser.');
     }
-
   </script>
 </body>
 </html>
-
-
