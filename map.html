@@ -178,6 +178,10 @@
       lng: 23.6307551
     };
 
+    // Add a marker with custom icon for the point of interest
+    var marker8 = L.marker([pointOfInterest8.lat, pointOfInterest8.lng], {icon: poiIcon}).addTo(map);
+    marker8.bindPopup('<h3>' + pointOfInterest8.name + '</h3><p>' + pointOfInterest8.description8 + '</p>');
+
     // Function to display user's location on the map with a custom icon
     function displayUserLocation(position) {
       var userLat = position.coords.latitude;
